@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <title>Confirmar usuario - EUS</title>
+    <meta property="og:title" content="EUS - Egresados Universidad de Sucre"/>
+{% endblock %}
+
+{% block content %}
+    <div class="container container--flex">
+        <img class="index__image" src="{{ url_for('static', filename='resources/img/login_img.jpg') }}">
+        <form class="form" action="{{ url_for('users.confirm_user', user_id=request.path.split('/')[-1]) }}"
+              method="post" style="text-align: center">
+            {{ form.hidden_tag() }}
+            <h1 class="form__title" style="font-size: 1.25em;">
+                Confirmar acceso para {{ user.email }}.<br>Introduzca una contraseña personal.
+            </h1>
+            <div class="form__input-container form__input-container--password">
+                {{ form.password(class_="form__input-box", style="font-size: 1em; padding: 1% 5%; margin-bottom: 2%;",
+                    placeholder="Contraseña") }}
+                {{ form.confirm_password(class_="form__input-box", style="font-size: 1em; padding: 1% 5%;",
+                    placeholder="Confirmar contraseña") }}
+                <div class="password-requirements-modal">
+                    <p>Su contraseña es: <span id="pass_strength">nada</span> segura.</p>
+                    <p>Requisitos mínimos de seguridad:</p>
+                    <div class="password-requirements-list">
+                        <p id="requirement_length">- 8 caracteres</p>
+                        <p id="requirement_upper">- Una letra mayúscula</p>
+                        <p id="requirement_lower">- Una letra minúscula</p>
+                        <p id="requirement_digits">- Un número</p>
+                        <p id="requirement_nonWords">- Un caracter especial (!, *, %, $, etc.)</p>
+                    </div>
+                </div>
+            </div>
+            <input class="form__submit" type="submit" value="Confirmar registro" style="width: auto; margin: 0;">
+        </form>
+    </div>
+
+    <script>
+        function scorePassword(pass) {
+            var score = 0,
+                letters = new Object(),
+                variations,
+                variationCount,
+                check;
+
+            if (!pass) return score;
+
+            // award every unique letter until 5 repetitions
+            for (var i=0; i<pass.length; i++) {
+                letters[pass[i]] = (letters[pass[i]] || 0) + 1;
+                score += 5.0 / letters[pass[i]];
+            }
+
+            // bonus points for mixing it up
+            variations = {
+                digits: /\d/.test(pass),
+                lower: /[a-z]/.test(pass),
+                upper: /[A-Z]/.test(pass),
+                nonWords: /\W/.test(pass),
+            };
+
+            variationCount = 0;
+
+            for (check in variations) {
+                variationCount += (variations[check] === true) ? 1 : 0;
+            }
+            score += (variationCount - 1) * 10;
+
+            return parseInt(score);
+        }
+
+        function checkPassStrength(pass) {
+            var score = scorePassword(pass);
+
+            if (score > 80)
+                return "bastante";
+            if (score > 60)
+                return "muy";
+            if (score >= 30)
+                return "poco";
+
+            return "nada";
+        }
+
+        function validators(pass) {
+            var requirementsL = [
+                    'length',
+                    'digits',
+                    'lower',
+                    'upper',
+                    'nonWords'
+                ],
+                requirements = {
+                    length: pass.length >= 8,
+                    digits: /\d/.test(pass),
+                    lower: /[a-z]/.test(pass),
+                    upper: /[A-Z]/.test(pass),
+                    nonWords: /\W/.test(pass),
+                },
+                validated = [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ];
+
+            for (var i=0; i<requirementsL.length; i++) {
+                if (requirements[requirementsL[i]]) {
+                    $('#requirement_'+ requirementsL[i]).css('text-decoration', 'line-through');
+                    validated[i] = true;
+                }
+                else {
+                    $('#requirement_'+ requirementsL[i]).css('text-decoration', 'none');
+                    validated[i] = false;
+                }
+            }
+
+            return validated.indexOf(false) === -1;
+        }
+
+        $('#password').keyup(function () {
+            var value = $(this).val();
+
+            $('#pass_strength').html(checkPassStrength(value));
+            validators(value);
+        });
+
+        $('.form__submit').on('click', function (e) {
+            var pass = $('#password').val(),
+                confirmPass = $('#confirm_password').val();
+
+            if (!validators(pass)) {
+                e.preventDefault();
+                alert('Debe ingresar una contraseña segura con las especificaciones anteriores antes de continuar');
+            }
+
+            if (pass !== confirmPass) {
+                e.preventDefault();
+                alert('Asegúrese de que ambos campos contengan la misma contraseña.');
+            }
+        });
+    </script>
+{% endblock %}

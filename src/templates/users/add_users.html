@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <title>Agregar usuarios - EUS</title>
+    <meta property="og:title" content="EUS - Egresados Universidad de Sucre"/>
+{% endblock %}
+
+{% block content %}
+    <div class="container container--flex" style="overflow-y: auto;">
+        <div class="left-container">
+            <a class="section-selector section-selector--active" href="{{ url_for('index', section='poll') }}"
+               onclick="return confirm_submit('Back');">
+                <svg class="section-selector__icon" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                     width="512" height="512" viewBox="0 0 512 512">
+                    <path fill="#abadbb" d="M0 416h512v64h-512zM64 288h64v96h-64zM160 160h64v224h-64zM256 256h64v128h-64zM352 64h64v320h-64z"></path>
+                </svg>
+                Encuestas
+            </a>
+            <a class="section-selector" href="{{ url_for('index', section='post') }}"
+               onclick="return confirm_submit('Back');">
+                <svg class="section-selector__icon" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                     width="512" height="512" viewBox="0 0 512 512">
+                    <path fill="#abadbb" d="M448 128v-64h-448v352c0 17.673 14.327 32 32 32h432c26.511 0 48-21.489 48-48v-272h-64zM416 416h-384v-320h384v320zM64 160h320v32h-320zM256 224h128v32h-128zM256 288h128v32h-128zM256 352h96v32h-96zM64 224h160v160h-160z"></path>
+                </svg>
+                Noticias
+            </a>
+        </div>
+        <div class="right-container">
+            <form class="form__add-users form__add-users--add" action="{{ url_for('users.add_users') }}" method="post">
+                {{ form.hidden_tag() }}
+                <div class="form__add-users-title">
+                    <p>Agregar usuarios</p>
+                </div>
+                {% if users %}
+                    {% for user in users %}
+                        <div class="form__add-users-container">
+                            <input class="form__add-users-input" type="text" name="name" required
+                                   placeholder="Nombre completo" value="{{ user.name }}">
+                            <input class="form__add-users-input{% if user.email in error %} form__add-users-input--error{% endif %}"
+                                   type="email" name="email" required placeholder="Email" value="{{ user.email }}">
+                            <input class="form__add-users-input{% if user.id in error %} form__add-users-input--error{% endif %}"
+                                   type="number" name="id" required placeholder="Cédula" value="{{ user.id }}">
+                            <div class="form__add-users-delete form__add-users-delete--btn">
+                                <svg class="poll__delete-icon" version="1.1" xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+                                    <path fill="#c00" d="M507.331 411.33c-0.002-0.002-0.004-0.004-0.006-0.005l-155.322-155.325 155.322-155.325c0.002-0.002 0.004-0.003 0.006-0.005 1.672-1.673 2.881-3.627 3.656-5.708 2.123-5.688 0.912-12.341-3.662-16.915l-73.373-73.373c-4.574-4.573-11.225-5.783-16.914-3.66-2.080 0.775-4.035 1.984-5.709 3.655 0 0.002-0.002 0.003-0.004 0.005l-155.324 155.326-155.324-155.325c-0.002-0.002-0.003-0.003-0.005-0.005-1.673-1.671-3.627-2.88-5.707-3.655-5.69-2.124-12.341-0.913-16.915 3.66l-73.374 73.374c-4.574 4.574-5.784 11.226-3.661 16.914 0.776 2.080 1.985 4.036 3.656 5.708 0.002 0.001 0.003 0.003 0.005 0.005l155.325 155.324-155.325 155.326c-0.001 0.002-0.003 0.003-0.004 0.005-1.671 1.673-2.88 3.627-3.657 5.707-2.124 5.688-0.913 12.341 3.661 16.915l73.374 73.373c4.575 4.574 11.226 5.784 16.915 3.661 2.080-0.776 4.035-1.985 5.708-3.656 0.001-0.002 0.003-0.003 0.005-0.005l155.324-155.325 155.324 155.325c0.002 0.001 0.004 0.003 0.006 0.004 1.674 1.672 3.627 2.881 5.707 3.657 5.689 2.123 12.342 0.913 16.914-3.661l73.373-73.374c4.574-4.574 5.785-11.227 3.662-16.915-0.776-2.080-1.985-4.034-3.657-5.707z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="form__add-users-container">
+                        <input class="form__add-users-input" type="text" name="name" required placeholder="Nombre completo">
+                        <input class="form__add-users-input" type="email" name="email" required placeholder="Email">
+                        <input class="form__add-users-input" type="number" name="id" required placeholder="Cédula">
+                    </div>
+                {% endif %}
+                <div class="form__add-users-btn-container">
+                    <div class="form__add-users-btn">
+                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="640" height="640" viewBox="0 0 640 640">
+                            <path fill="#15431F" d="M352 288v-128h-64v128h-128v64h128v128h64v-128h128v-64h-128zM320 640c-176.731 0-320-143.269-320-320s143.269-320 320-320v0c176.731 0 320 143.269 320 320s-143.269 320-320 320v0z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="form__poll-submit-container">
+                    <a class="form__post-submit form__post-submit--cancel" href="{{ url_for('index') }}"
+                       onclick="return confirm_submit('Cancelar');">Cancelar</a>
+                    <input class="form__post-submit" type="submit" name="submit" value="Agregar">
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        $('input.form__post-submit').on('click', function (e) {
+            var valid = true;
+
+            if ($('.form__add-users-container').length === 0) {
+                e.preventDefault();
+                alert('Agregue un usuario con sus datos, por favor.');
+                return false;
+            }
+
+            $('.form__add-users-input').each(function () {
+                if (!$(this).val()) {
+                    valid = false;
+                    return false;
+                }
+            });
+
+            if (!valid) {
+                e.preventDefault();
+                alert('Complete todos los campos');
+                return false;
+            }
+            else {
+                return confirm_submit('Agregar');
+            }
+        });
+    </script>
+{% endblock %}

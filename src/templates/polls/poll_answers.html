@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <title>Respuestas de '{{ poll['title'] }}' - EUS</title>
+    <meta property="og:title" content="EUS - Egresados Universidad de Sucre"/>
+{% endblock %}
+
+{% block content %}
+    <div class="container container--flex" data-container="add-poll">
+        <div class="left-container">
+            <a class="section-selector section-selector--active" href="{{ url_for('index', section='poll') }}">
+                <svg class="section-selector__icon" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                     width="512" height="512" viewBox="0 0 512 512">
+                    <path fill="#abadbb" d="M0 416h512v64h-512zM64 288h64v96h-64zM160 160h64v224h-64zM256 256h64v128h-64zM352 64h64v320h-64z"></path>
+                </svg>
+                Encuestas
+            </a>
+            <a class="section-selector" href="{{ url_for('index', section='post') }}">
+                <svg class="section-selector__icon" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                     width="512" height="512" viewBox="0 0 512 512">
+                    <path fill="#abadbb" d="M448 128v-64h-448v352c0 17.673 14.327 32 32 32h432c26.511 0 48-21.489 48-48v-272h-64zM416 416h-384v-320h384v320zM64 160h320v32h-320zM256 224h128v32h-128zM256 288h128v32h-128zM256 352h96v32h-96zM64 224h160v160h-160z"></path>
+                </svg>
+                Noticias
+            </a>
+        </div>
+        <div class="right-container">
+            <div class="go-back__container">
+                <a class="go-back__btn" href="{{ url_for('index') }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 612.077 612.077" style="enable-background:new 0 0 612.077 612.077;" xml:space="preserve">
+                        <g>
+                            <path fill="#15431F" d="M306.037,0.001C136.997,0.001,0,136.999,0,306.039s137.813,306.037,306.037,306.037s306.037-136.997,306.037-306.037   C612.816,136.999,475.077,0.001,306.037,0.001z M306.037,582.332c-152.203,0-276.368-124.165-276.368-276.368   S153.834,29.596,306.037,29.596s276.368,124.165,276.368,276.368S459.056,582.332,306.037,582.332z M462.245,305.964   c0,8.011-6.379,14.39-14.39,14.39H213.099l83.296,83.296c5.637,5.637,5.637,15.205,0,20.843c-3.189,3.189-6.379,4.005-10.384,4.005   c-4.005,0-7.195-1.632-10.384-4.005l-108.96-108.07c-0.816-0.816-1.632-1.632-1.632-2.374l-0.816-0.816   c0-0.816-0.816-0.816-0.816-1.632c0-0.816,0-0.816-0.816-1.632c0-0.816,0-0.816,0-1.632c0-1.632,0-4.005,0-5.637   c0-0.816,0-0.816,0-1.632s0-0.816,0.816-1.632c0-0.816,0.816-0.816,0.816-1.632c0,0,0-0.816,0.816-0.816   c0.816-0.816,0.816-1.632,1.632-2.374L276.442,184.84c5.637-5.637,15.205-5.637,20.843,0c5.637,5.637,5.637,15.205,0,20.843   l-84.186,85.076h234.683C455.792,290.759,462.245,297.954,462.245,305.964z"></path>
+                        </g>
+                    </svg>
+                </a>
+            </div>
+            <div class="poll__answers-container">
+                <p class="poll__title">{{ poll['title'] }}</p>
+                <div class="poll__questions-container">
+                    {% for question in poll['questions'] %}
+                        <div class="question__container" data-question="{{ loop.index }}">
+                            <p class="question__title">
+                                Pregunta {{ loop.index }}
+                            </p>
+                            <p class="question__title">
+                                {{ question['content'] }}
+                            </p>
+                            {% if question['type'] == 'open' %}
+                                <div class="question__answers-container">
+                                    {% if answers[loop.index0] %}
+                                        {% for answer in answers[loop.index0] %}
+                                            <p class="question__answer">
+                                                {{ answer }}
+                                            </p>
+                                        {% endfor %}
+                                    {% else %}
+                                        <p class="question__answer">
+                                            No hay ninguna respuesta por el momento.
+                                        </p>
+                                    {% endif %}
+                                </div>
+                            {% else %}
+                                {% if answers[loop.index0][1]|sum %}
+                                    <div id="graph-{{ loop.index0 }}" class="question__graph-container"
+                                         data-graph="{{ loop.index0 }}">
+                                    </div>
+                                {% else %}
+                                    <div class="question__answers-container">
+                                        <p class="question__answer">
+                                            No hay ninguna respuesta por el momento.
+                                        </p>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script>
+        var d3 = Plotly.d3,
+            full_data = {{ answers|tojson|safe }},
+            gd3,
+            gd,
+            trace,
+            layout,
+            data;
+
+        $('.question__graph-container').each(function () {
+            var $this = $(this);
+
+            gd3 = d3.select('div[id="' + $this.attr('id') + '"]');
+            gd = gd3.node();
+
+            trace = {
+                type: 'bar',
+                x: full_data[$this.data('graph')][0],
+                y: full_data[$this.data('graph')][1]
+            };
+
+            data = [trace];
+            layout = {
+                autosize: true,
+                xaxis: {
+                    tickangle: 45,
+                    type: 'category'
+                },
+                yaxis: {
+                    tickformat: ',d'
+                },
+                plot_bgcolor: 'dedede',
+                paper_bgcolor: 'dedede'
+            };
+
+            Plotly.newPlot($this.attr('id'), data, layout, {responsive: true, displayModeBar: false});
+            graphResize($this);
+
+            window.addEventListener('resize', function () { graphResize($this) });
+        });
+
+        function graphResize ($graph) {
+            gd3 = d3.select('div[id="' + $graph.attr('id') + '"]');
+            if (/Android|webOS|iPhone|iPad|BlackBerry|Windows Phone|Opera Mini|IEMobile|Mobile/i.test(navigator.userAgent)) {
+                console.log($(window).width());
+                console.log($(window).height());
+                gd3.style({
+                    width: ($(window).width() * 0.85) + 'px',
+                    height: ($(window).width() * 0.75) + 'px'
+                });
+            }
+            else {
+                gd3.style({
+                    width: ($graph.parent().width() * 0.75) + 'px',
+                    height: ($graph.parent().width() * 0.55) + 'px'
+                });
+            }
+            gd = gd3.node();
+
+            Plotly.Plots.resize(gd);
+        }
+    </script>
+{% endblock %}

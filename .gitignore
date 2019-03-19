@@ -1,0 +1,18 @@
+# VirtualEnv
+venv
+venv/
+
+# Database setup
+src/common/database.py
+
+# Distribution / packaging
+.Python
+
+# Generated files
+.idea/
+.vscode/
+__pycache__/
+
+# PyCharm YUI Compression Tool
+node_modules/
+package-lock.json

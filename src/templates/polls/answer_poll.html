@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <title>Contestar '{{ poll['title'] }}' - EUS</title>
+    <meta property="og:title" content="EUS - Egresados Universidad de Sucre"/>
+{% endblock %}
+
+{% block content %}
+    <div class="container container--flex">
+        <div class="left-container">
+            <a class="section-selector section-selector--active" href="{{ url_for('index', section='poll') }}" onclick="confirm_submit('Back')">
+                <svg class="section-selector__icon" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                     width="512" height="512" viewBox="0 0 512 512">
+                    <path fill="#abadbb" d="M0 416h512v64h-512zM64 288h64v96h-64zM160 160h64v224h-64zM256 256h64v128h-64zM352 64h64v320h-64z"></path>
+                </svg>
+                Encuestas
+            </a>
+            <a class="section-selector" href="{{ url_for('index', section='post') }}" onclick="confirm_submit('Back')">
+                <svg class="section-selector__icon" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                     width="512" height="512" viewBox="0 0 512 512">
+                    <path fill="#abadbb" d="M448 128v-64h-448v352c0 17.673 14.327 32 32 32h432c26.511 0 48-21.489 48-48v-272h-64zM416 416h-384v-320h384v320zM64 160h320v32h-320zM256 224h128v32h-128zM256 288h128v32h-128zM256 352h96v32h-96zM64 224h160v160h-160z"></path>
+                </svg>
+                Noticias
+            </a>
+        </div>
+        <div class="right-container">
+            {% if poll['users'] and current_user._id in poll['users'] %}
+                <div class="go-back__container">
+                    <a class="go-back__btn" href="{{ url_for('index') }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 612.077 612.077" style="enable-background:new 0 0 612.077 612.077;" xml:space="preserve">
+                            <g>
+                                <path fill="#15431F" d="M306.037,0.001C136.997,0.001,0,136.999,0,306.039s137.813,306.037,306.037,306.037s306.037-136.997,306.037-306.037   C612.816,136.999,475.077,0.001,306.037,0.001z M306.037,582.332c-152.203,0-276.368-124.165-276.368-276.368   S153.834,29.596,306.037,29.596s276.368,124.165,276.368,276.368S459.056,582.332,306.037,582.332z M462.245,305.964   c0,8.011-6.379,14.39-14.39,14.39H213.099l83.296,83.296c5.637,5.637,5.637,15.205,0,20.843c-3.189,3.189-6.379,4.005-10.384,4.005   c-4.005,0-7.195-1.632-10.384-4.005l-108.96-108.07c-0.816-0.816-1.632-1.632-1.632-2.374l-0.816-0.816   c0-0.816-0.816-0.816-0.816-1.632c0-0.816,0-0.816-0.816-1.632c0-0.816,0-0.816,0-1.632c0-1.632,0-4.005,0-5.637   c0-0.816,0-0.816,0-1.632s0-0.816,0.816-1.632c0-0.816,0.816-0.816,0.816-1.632c0,0,0-0.816,0.816-0.816   c0.816-0.816,0.816-1.632,1.632-2.374L276.442,184.84c5.637-5.637,15.205-5.637,20.843,0c5.637,5.637,5.637,15.205,0,20.843   l-84.186,85.076h234.683C455.792,290.759,462.245,297.954,462.245,305.964z"></path>
+                            </g>
+                        </svg>
+                    </a>
+                </div>
+                <div class="poll__answered-container">
+                    <p class="poll__answered-text">
+                        Ya contestaste esta encuesta
+                    </p>
+                </div>
+            {% else %}
+                <div class="go-back__container">
+                    <a class="go-back__btn" href="{{ url_for('index') }}" onclick="return confirm_submit('Back');">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 612.077 612.077" style="enable-background:new 0 0 612.077 612.077;" xml:space="preserve">
+                            <g>
+                                <path fill="#15431F" d="M306.037,0.001C136.997,0.001,0,136.999,0,306.039s137.813,306.037,306.037,306.037s306.037-136.997,306.037-306.037   C612.816,136.999,475.077,0.001,306.037,0.001z M306.037,582.332c-152.203,0-276.368-124.165-276.368-276.368   S153.834,29.596,306.037,29.596s276.368,124.165,276.368,276.368S459.056,582.332,306.037,582.332z M462.245,305.964   c0,8.011-6.379,14.39-14.39,14.39H213.099l83.296,83.296c5.637,5.637,5.637,15.205,0,20.843c-3.189,3.189-6.379,4.005-10.384,4.005   c-4.005,0-7.195-1.632-10.384-4.005l-108.96-108.07c-0.816-0.816-1.632-1.632-1.632-2.374l-0.816-0.816   c0-0.816-0.816-0.816-0.816-1.632c0-0.816,0-0.816-0.816-1.632c0-0.816,0-0.816,0-1.632c0-1.632,0-4.005,0-5.637   c0-0.816,0-0.816,0-1.632s0-0.816,0.816-1.632c0-0.816,0.816-0.816,0.816-1.632c0,0,0-0.816,0.816-0.816   c0.816-0.816,0.816-1.632,1.632-2.374L276.442,184.84c5.637-5.637,15.205-5.637,20.843,0c5.637,5.637,5.637,15.205,0,20.843   l-84.186,85.076h234.683C455.792,290.759,462.245,297.954,462.245,305.964z"></path>
+                            </g>
+                        </svg>
+                    </a>
+                </div>
+                <form class="form form--poll" style="height: 100%;"
+                      action="{{ url_for('polls.view_poll', poll_id=poll['_id']) }}" method="post">
+                    <p class="poll__title">{{ poll['title'] }}</p>
+                    <div class="poll__questions-container" style="position: relative; height: 75%; margin-bottom: 2%">
+                        {% for question in poll['questions'] %}
+                            {% set question_number = loop.index %}
+
+                            <div class="poll__answer-question-container{% if loop.first %} poll__answer-question-container--active{% endif %}"
+                                 data-question="{{ question_number }}" data-type="{{ question['type'] }}">
+                                <label for="question">Pregunta {{ question_number }}</label>
+                                <p class="question__content">{{ question['content'] }}</p>
+                                {% if question['type'] == 'open' %}
+                                    <textarea id="answer_{{ question_number }}" class="form__input-box form__input-box--post-description form__input-box--question-content"
+                                              name="answer_{{ question_number }}"></textarea>
+                                {% elif question['type'] == 'multiple' %}
+                                    <fieldset id="answer_{{ question_number }}" class="poll__answer-container">
+                                        {% for option in question['options'] %}
+                                            <input class="poll__answer" type="checkbox" value="{{ option }}"
+                                                   name="answer_{{ question_number }}"> {{ option }}<br>
+                                        {% endfor %}
+                                    </fieldset>
+                                {% else %}
+                                    <fieldset id="answer_{{ question_number }}" class="poll__answer-container">
+                                        {% for option in question['options'] %}
+                                            <input class="poll__answer" type="radio" value="{{ option }}"
+                                                   name="answer_{{ question_number }}"> {{ option }}<br>
+                                        {% endfor %}
+                                    </fieldset>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="poll__submit-btns">
+                        <div class="poll__btn poll__btn--prev poll__btn--disabled">
+                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+                                <path fill="#abadbb" d="M256 512c141.385 0 256-114.615 256-256s-114.615-256-256-256-256 114.615-256 256 114.615 256 256 256zM256 48c114.875 0 208 93.125 208 208s-93.125 208-208 208-208-93.125-208-208 93.125-208 208-208z"></path>
+                                <path fill="#abadbb" d="M334.628 158.628l-45.256-45.256-142.627 142.628 142.628 142.627 45.254-45.254-97.372-97.373z"></path>
+                            </svg>
+                        </div>
+                        {% if poll['questions']|length == 1 %}
+                            <input class="poll__btn poll__btn--submit" type="submit" value="Enviar">
+                        {% else %}
+                            <input class="poll__btn poll__btn--submit" type="submit" value="Enviar" style="display:none;">
+                        {% endif %}
+                        <div class="poll__btn poll__btn--next{% if poll['questions']|length == 1 %} poll__btn--disabled{% endif %}">
+                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+                                <path d="M256 0c-141.385 0-256 114.615-256 256s114.615 256 256 256 256-114.615 256-256-114.615-256-256-256zM256 464c-114.875 0-208-93.125-208-208s93.125-208 208-208 208 93.125 208 208-93.125 208-208 208z"></path>
+                                <path d="M177.372 353.372l45.256 45.256 142.627-142.628-142.628-142.627-45.254 45.254 97.372 97.373z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        var pollLength = {{ poll['questions']|length }};
+
+        $(document).on('click', '.poll__btn--submit', function (e) {
+            var valid = true;
+
+            $('.poll__answer-question-container').each(function () {
+                var question = $(this),
+                    questionNo = question.data('question'),
+                    questionType = question.data('type'),
+                    answer = question.find('#answer_'+questionNo);
+
+                if ((questionType === 'open' && !answer.val()) ||
+                    (questionType === 'multiple' && answer.find(':checkbox:checked').length === 0) ||
+                    ((questionType === 'boolean' || questionType === 'options') && answer.find(':radio:checked').length === 0)) {
+                    valid = false;
+                    return false;
+                }
+            });
+
+            if (!valid) {
+                alert('No puede dejar preguntas sin contestar.');
+                e.preventDefault();
+                return "";
+            }
+
+            return confirm("¿Desea publicar estas respuestas?");
+        });
+
+        $(document).on('click', '.poll__btn--next', function () {
+            var $current = $('.poll__answer-question-container--active'),
+                type = $current.data('type'),
+                next = $current.data('question') + 1,
+                answer = $('#answer_' + $current.data('question')),
+                valid = false;
+
+            if (!$(this).hasClass('poll__btn--disabled')) {
+                if ((type === 'open' && answer.val()) || answer.find(':checked').val()) {
+                    valid = true;
+                }
+
+                if (!valid) {
+                    alert('No puede dejar preguntas sin contestar.');
+                    return "";
+                }
+
+                if ($current.data('question') < pollLength) {
+                    $current.removeClass('poll__answer-question-container--active');
+                    $('[data-question="'+next+'"]').addClass('poll__answer-question-container--active');
+
+                    if (next === pollLength) {
+                        $('.poll__btn--next').addClass('poll__btn--disabled');
+                        $('.poll__btn--submit').show();
+                    }
+
+                    if ($current.data('question') === 1) {
+                        $('.poll__btn--prev').removeClass('poll__btn--disabled');
+                    }
+                }
+            }
+        });
+
+        $(document).on('click', '.poll__btn--prev', function () {
+            var $current = $('.poll__answer-question-container--active'),
+                prev = $current.data('question') - 1;
+
+            if ($current.data('question') > 1) {
+                $current.removeClass('poll__answer-question-container--active');
+                $('[data-question="'+prev+'"]').addClass('poll__answer-question-container--active');
+
+                if (prev === 1) {
+                    $('.poll__btn--prev').addClass('poll__btn--disabled');
+                }
+
+                if ($current.data('question') === pollLength) {
+                    $('.poll__btn--next').removeClass('poll__btn--disabled');
+                }
+            }
+        });
+    </script>
+
+{% endblock %}

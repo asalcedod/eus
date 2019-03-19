@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <title>Agregar Noticia - EUS</title>
+    <meta property="og:title" content="EUS - Egresados Universidad de Sucre"/>
+{% endblock %}
+
+{% block content %}
+    <div class="container container--flex" data-container="add-post">
+        <div class="left-container">
+            <a class="section-selector" href="{{ url_for('index', section='poll') }}"
+               onclick="return confirm_submit('Back');">
+                <svg class="section-selector__icon" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                     width="512" height="512" viewBox="0 0 512 512">
+                    <path fill="#abadbb" d="M0 416h512v64h-512zM64 288h64v96h-64zM160 160h64v224h-64zM256 256h64v128h-64zM352 64h64v320h-64z"></path>
+                </svg>
+                Encuestas
+            </a>
+            <a class="section-selector section-selector--active" href="{{ url_for('index', section='post') }}"
+               onclick="return confirm_submit('Back');">
+                <svg class="section-selector__icon" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                     width="512" height="512" viewBox="0 0 512 512">
+                    <path fill="#abadbb" d="M448 128v-64h-448v352c0 17.673 14.327 32 32 32h432c26.511 0 48-21.489 48-48v-272h-64zM416 416h-384v-320h384v320zM64 160h320v32h-320zM256 224h128v32h-128zM256 288h128v32h-128zM256 352h96v32h-96zM64 224h160v160h-160z"></path>
+                </svg>
+                Noticias
+            </a>
+        </div>
+        <div class="right-container">
+            <div class="go-back__container">
+                <a class="go-back__btn" href="{{ url_for('index') }}" onclick="return confirm_submit('Back');">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 612.077 612.077" style="enable-background:new 0 0 612.077 612.077;" xml:space="preserve">
+                        <g>
+                            <path fill="#15431F" d="M306.037,0.001C136.997,0.001,0,136.999,0,306.039s137.813,306.037,306.037,306.037s306.037-136.997,306.037-306.037   C612.816,136.999,475.077,0.001,306.037,0.001z M306.037,582.332c-152.203,0-276.368-124.165-276.368-276.368   S153.834,29.596,306.037,29.596s276.368,124.165,276.368,276.368S459.056,582.332,306.037,582.332z M462.245,305.964   c0,8.011-6.379,14.39-14.39,14.39H213.099l83.296,83.296c5.637,5.637,5.637,15.205,0,20.843c-3.189,3.189-6.379,4.005-10.384,4.005   c-4.005,0-7.195-1.632-10.384-4.005l-108.96-108.07c-0.816-0.816-1.632-1.632-1.632-2.374l-0.816-0.816   c0-0.816-0.816-0.816-0.816-1.632c0-0.816,0-0.816-0.816-1.632c0-0.816,0-0.816,0-1.632c0-1.632,0-4.005,0-5.637   c0-0.816,0-0.816,0-1.632s0-0.816,0.816-1.632c0-0.816,0.816-0.816,0.816-1.632c0,0,0-0.816,0.816-0.816   c0.816-0.816,0.816-1.632,1.632-2.374L276.442,184.84c5.637-5.637,15.205-5.637,20.843,0c5.637,5.637,5.637,15.205,0,20.843   l-84.186,85.076h234.683C455.792,290.759,462.245,297.954,462.245,305.964z"></path>
+                        </g>
+                    </svg>
+                </a>
+            </div>
+            <form class="form__post" action="{{ url_for('posts.add_post') }}" method="post"
+                  enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+                <div class="form__post-title-container">
+                    {{ form.title(class_="form__input-box form__input-box--post-title", placeholder="Título") }}
+                </div>
+                <div class="form__post-content">
+                    <div class="form__post-image-container">
+                        <svg class="form__post-image-icon" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                             width="512" height="512" viewBox="0 0 512 512">
+                            <path fill="#abadbb" d="M152 304c0 57.438 46.562 104 104 104s104-46.562 104-104-46.562-104-104-104-104 46.562-104 104zM480 128h-112c-8-32-16-64-48-64h-128c-32 0-40 32-48 64h-112c-17.6 0-32 14.4-32 32v288c0 17.6 14.4 32 32 32h448c17.6 0 32-14.4 32-32v-288c0-17.6-14.4-32-32-32zM256 446c-78.425 0-142-63.574-142-142s63.575-142 142-142c78.426 0 142 63.575 142 142s-63.573 142-142 142zM480 224h-64v-32h64v32z"></path>
+                        </svg>
+                        <img id="image-preview" src="" style="display:none;">
+                        <video id="video" width="320" height="240" controls style="display:none;" src="">
+                            Tu navegador no soporta este tipo de video.
+                        </video>
+                        {{ form.file(class_="form__post-image", accept=".jpg, .jpeg, .png, .gif, .avi, .flv, .mp4, .wvm, .webm, .mov") }}
+                    </div>
+                    <div class="form__post-text-container">
+                        {{ form.content(class_="form__post-text", placeholder="Contenido") }}
+                        <div class="form__post-submit-container">
+                            <a class="form__post-submit form__post-submit--cancel" href="{{ url_for('index') }}"
+                               onclick="return confirm_submit('Cancelar');">Cancelar</a>
+                            <input class="form__post-submit" type="submit" name="submit" value="Guardar"
+                                   onclick="return confirm_submit(this.value);">
+                            <input class="form__post-submit" type="submit" name="submit" value="Publicar"
+                                   onclick="return confirm_submit(this.value);">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        var width = $('.form__post-image-container').width(),
+            height = $('.form__post-image-container').height();
+
+        $('#video').width(width)
+            .height(height);
+    </script>
+{% endblock %}

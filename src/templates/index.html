@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <title>EUS</title>
+    <meta property="og:title" content="EUS - Egresados Universidad de Sucre"/>
+{% endblock %}
+
+{% block content %}
+    <div class="container container--flex container--index">
+        {% if not current_user.is_authenticated %}
+            <img class="index__image" src="{{ url_for('static', filename='resources/img/index_img.jpg') }}">
+            <p class="index__text">
+                Manténte al tanto de todo lo que sucede en tu alma mater, usa EUS.
+            </p>
+        {% else %}
+            <div class="left-container">
+                <p class="section-selector{% if section == 'poll' %} section-selector--active{% endif %}" data-section="poll">
+                    <svg class="section-selector__icon" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                         width="512" height="512" viewBox="0 0 512 512">
+                        <path fill="#abadbb" d="M0 416h512v64h-512zM64 288h64v96h-64zM160 160h64v224h-64zM256 256h64v128h-64zM352 64h64v320h-64z"></path>
+                    </svg>
+                    Encuestas
+                </p>
+                <p class="section-selector{% if section == 'post' %} section-selector--active{% endif %}" data-section="post">
+                    <svg class="section-selector__icon" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                         width="512" height="512" viewBox="0 0 512 512">
+                        <path fill="#abadbb" d="M448 128v-64h-448v352c0 17.673 14.327 32 32 32h432c26.511 0 48-21.489 48-48v-272h-64zM416 416h-384v-320h384v320zM64 160h320v32h-320zM256 224h128v32h-128zM256 288h128v32h-128zM256 352h96v32h-96zM64 224h160v160h-160z"></path>
+                    </svg>
+                    Noticias
+                </p>
+            </div>
+            <div class="right-container" data-section="{{ section }}">
+                <div class="polls" data-section="poll" {% if section == 'post' %}style="display:none;"{% endif %}>
+                    {% if polls %}
+                        {% set pollsToAnswer = {'poll': False} %}
+                        {% for poll in polls %}
+                            {% if (current_user.role == 'graduate' and poll['published'])
+                                or (current_user.role == 'teacher') %}
+                                {% if current_user['_id'] not in poll['users'] %}
+                                    {% if pollsToAnswer.update({'poll': True}) %} {% endif %}
+                                    <div class="poll__container">
+                                        <a class="poll__link" {% if poll['published'] %}
+                                           href="{{ url_for('polls.view_poll', poll_id=poll['_id']) }}"{% else %}
+                                            href="{{ url_for('polls.edit_poll', poll_id=poll['_id']) }}"{% endif %}>
+                                            {{ poll['title'] }}
+                                        </a>
+                                        <p class="poll__timestamp">
+                                            <abbr title="{{ poll['timestamp'].strftime('%d/%b/%Y - %I:%M %p') }}">
+                                                {{ poll['timestamp']|timesince }}
+                                            </abbr>
+                                        </p>
+                                        {% if current_user.role == 'teacher' %}
+                                            <a class="poll__delete" onclick="return confirm_submit('Delete poll')"
+                                               href="{{ url_for('polls.delete_poll', poll_id=poll['_id']) }}">
+                                                <svg class="poll__delete-icon" version="1.1" xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+                                                    <path fill="#c00" d="M507.331 411.33c-0.002-0.002-0.004-0.004-0.006-0.005l-155.322-155.325 155.322-155.325c0.002-0.002 0.004-0.003 0.006-0.005 1.672-1.673 2.881-3.627 3.656-5.708 2.123-5.688 0.912-12.341-3.662-16.915l-73.373-73.373c-4.574-4.573-11.225-5.783-16.914-3.66-2.080 0.775-4.035 1.984-5.709 3.655 0 0.002-0.002 0.003-0.004 0.005l-155.324 155.326-155.324-155.325c-0.002-0.002-0.003-0.003-0.005-0.005-1.673-1.671-3.627-2.88-5.707-3.655-5.69-2.124-12.341-0.913-16.915 3.66l-73.374 73.374c-4.574 4.574-5.784 11.226-3.661 16.914 0.776 2.080 1.985 4.036 3.656 5.708 0.002 0.001 0.003 0.003 0.005 0.005l155.325 155.324-155.325 155.326c-0.001 0.002-0.003 0.003-0.004 0.005-1.671 1.673-2.88 3.627-3.657 5.707-2.124 5.688-0.913 12.341 3.661 16.915l73.374 73.373c4.575 4.574 11.226 5.784 16.915 3.661 2.080-0.776 4.035-1.985 5.708-3.656 0.001-0.002 0.003-0.003 0.005-0.005l155.324-155.325 155.324 155.325c0.002 0.001 0.004 0.003 0.006 0.004 1.674 1.672 3.627 2.881 5.707 3.657 5.689 2.123 12.342 0.913 16.914-3.661l73.373-73.374c4.574-4.574 5.785-11.227 3.662-16.915-0.776-2.080-1.985-4.034-3.657-5.707z"></path>
+                                                </svg>
+                                            </a>
+                                            <a class="poll__copy" onclick="return confirm_submit('Copy poll')"
+                                               href="{{ url_for('polls.copy_poll', poll_id=poll['_id']) }}">
+                                               <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 470.333 470.333" style="enable-background:new 0 0 470.333 470.333;" xml:space="preserve" width="15px" height="15px"><g><g>
+                                                <g>
+                                                    <path d="M333.483,0h-194.65c-9.35,0-17,7.65-17,17v73.667H48.167c-9.35,0-17,7.65-17,17v345.667c0,9.35,7.65,17,17,17h286.167    c9.35,0,17-7.65,17-17v-76.5h70.833c9.35,0,17-7.65,17-17V106.25c0-4.533-1.7-8.783-4.817-11.9L345.667,5.1    C342.55,1.7,338.017,0,333.483,0z M317.333,436.333H65.167V124.667h56.667v235.167c0,9.35,7.65,17,17,17h178.5V436.333z     M155.833,342.833V34h147.333v96.333c0,9.35,7.65,17,17,17h85v195.5H155.833z M405.167,113.333h-68V44.767L405.167,113.333    L405.167,113.333z" data-original="#000000" class="active-path" data-old_color="#15431f" fill="#15431f"/>
+                                                </g>
+                                            </g></g> </svg>
+                                            </a>
+                                            {% if poll['published'] %}
+                                                <p class="poll__published poll__published--active">
+                                                    Publicada
+                                                </p>
+                                            {% else %}
+                                                <p class="poll__published poll__published--inactive">
+                                                    Sin publicar
+                                                </p>
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        {% if not pollsToAnswer.poll and current_user.role == 'graduate' %}
+                            <div class="poll__container">
+                                <p>No hay encuestas por contestar.</p>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="poll__container">
+                            <p>No hay encuestas por el momento.</p>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="news" data-section="post" {% if section == 'poll' %}style="display:none;"{% endif %}>
+                    {% if posts %}
+                        {% for post in posts %}
+                            {% if (current_user.role == 'graduate' and post['published']) or (current_user.role == 'teacher') %}
+                                <div class="poll__container">
+                                    {% if current_user.role == 'graduate' and post['file'] %}
+                                        {% set extension = post['file'].split('.').pop()|lower %}
+
+                                        {% if extension in ['jpg', 'png', 'gif', 'jpeg'] %}
+                                            <img class="post__image-thumbnail"
+                                                 src="{{ url_for('static', filename='resources/img/posts/'+post['file']) }}">
+                                        {% endif %}
+                                    {% endif %}
+                                    <a class="poll__link" {% if post['published'] %}
+                                       href="{{ url_for('posts.view_post', post_id=post['_id']) }}"{% else %}
+                                        href="{{ url_for('posts.edit_post', post_id=post['_id']) }}"{% endif %}>
+                                        {{ post['title'] }}
+                                    </a>
+                                    <p class="poll__timestamp">
+                                        <abbr title="{{ post['timestamp'].strftime('%d/%b/%Y - %I:%M %p') }}">
+                                            {{ post['timestamp']|timesince }}
+                                        </abbr>
+                                    </p>
+                                    {% if current_user.role == 'teacher' %}
+                                        <a class="poll__delete" onclick="return confirm_submit('Delete post')"
+                                           href="{{ url_for('posts.delete_post', post_id=post['_id']) }}">
+                                            <svg class="poll__delete-icon" version="1.1" xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+                                                <path fill="#c00" d="M507.331 411.33c-0.002-0.002-0.004-0.004-0.006-0.005l-155.322-155.325 155.322-155.325c0.002-0.002 0.004-0.003 0.006-0.005 1.672-1.673 2.881-3.627 3.656-5.708 2.123-5.688 0.912-12.341-3.662-16.915l-73.373-73.373c-4.574-4.573-11.225-5.783-16.914-3.66-2.080 0.775-4.035 1.984-5.709 3.655 0 0.002-0.002 0.003-0.004 0.005l-155.324 155.326-155.324-155.325c-0.002-0.002-0.003-0.003-0.005-0.005-1.673-1.671-3.627-2.88-5.707-3.655-5.69-2.124-12.341-0.913-16.915 3.66l-73.374 73.374c-4.574 4.574-5.784 11.226-3.661 16.914 0.776 2.080 1.985 4.036 3.656 5.708 0.002 0.001 0.003 0.003 0.005 0.005l155.325 155.324-155.325 155.326c-0.001 0.002-0.003 0.003-0.004 0.005-1.671 1.673-2.88 3.627-3.657 5.707-2.124 5.688-0.913 12.341 3.661 16.915l73.374 73.373c4.575 4.574 11.226 5.784 16.915 3.661 2.080-0.776 4.035-1.985 5.708-3.656 0.001-0.002 0.003-0.003 0.005-0.005l155.324-155.325 155.324 155.325c0.002 0.001 0.004 0.003 0.006 0.004 1.674 1.672 3.627 2.881 5.707 3.657 5.689 2.123 12.342 0.913 16.914-3.661l73.373-73.374c4.574-4.574 5.785-11.227 3.662-16.915-0.776-2.080-1.985-4.034-3.657-5.707z"></path>
+                                            </svg>
+                                        </a>
+                                        {% if post['published'] %}
+                                            <p class="poll__published poll__published--active">
+                                                Publicada
+                                            </p>
+                                        {% else %}
+                                            <p class="poll__published poll__published--inactive">
+                                                Sin publicar
+                                            </p>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <div class="poll__container">
+                            <p>No hay noticias por el momento.</p>
+                        </div>
+                    {% endif %}
+                </div>
+                {% if current_user.role == 'teacher' %}
+                    <a class="add-new__container" href="{{ url_for('polls.add_poll') }}" data-section="poll"
+                        {% if section == 'post' %}style="display:none;"{% endif %}>
+                        <svg class="add-new__btn" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                             width="512" height="512" viewBox="0 0 512 512">
+                            <path fill="#15431F" d="M496 192h-176v-176c0-8.836-7.164-16-16-16h-96c-8.836 0-16 7.164-16 16v176h-176c-8.836 0-16 7.164-16 16v96c0 8.836 7.164 16 16 16h176v176c0 8.836 7.164 16 16 16h96c8.836 0 16-7.164 16-16v-176h176c8.836 0 16-7.164 16-16v-96c0-8.836-7.164-16-16-16z"></path>
+                        </svg>
+                    </a>
+                    <a class="add-new__container" href="{{ url_for('posts.add_post') }}" data-section="post"
+                        {% if section == 'poll' %}style="display:none;"{% endif %}>
+                        <svg class="add-new__btn" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                             width="512" height="512" viewBox="0 0 512 512">
+                            <path fill="#15431F" d="M496 192h-176v-176c0-8.836-7.164-16-16-16h-96c-8.836 0-16 7.164-16 16v176h-176c-8.836 0-16 7.164-16 16v96c0 8.836 7.164 16 16 16h176v176c0 8.836 7.164 16 16 16h96c8.836 0 16-7.164 16-16v-176h176c8.836 0 16-7.164 16-16v-96c0-8.836-7.164-16-16-16z"></path>
+                        </svg>
+                    </a>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+

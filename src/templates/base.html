@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+
+<head>
+    {% block title %}
+    {% endblock %}
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/resources/img/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/resources/img/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/resources/img/icons/favicon-16x16.png">
+    <link rel="manifest" href="/static/resources/img/icons/site.webmanifest">
+    <link rel="mask-icon" href="/static/resources/img/icons/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="shortcut icon" href="/static/resources/img/icons/favicon.ico">
+    <meta name="msapplication-TileColor" content="#00a300">
+    <meta name="msapplication-TileImage" content="/static/resources/img/icons/mstile-144x144.png">
+    <meta name="msapplication-config" content="/static/resources/img/icons/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='resources/css/style.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='resources/css/queries.min.css') }}">
+    <link rel="preload" href="{{ url_for('static', filename='resources/css/mobile.min.css') }}" as="style">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='resources/css/mobile.min.css') }}"
+        disabled>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <header class="header">
+        <a class="header__logo" style = "color: rgb(22, 75, 34);" href="{{ url_for('index') }}">
+            EUS
+        </a>
+        <div class="header__login">
+            {% if current_user.is_authenticated %}
+                {% if current_user.role == 'teacher' %}
+                    <a class="header__login-btn" href="{{ url_for('users.view_users') }}">
+                        <svg class="header__login-svg" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+                             xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="512px" height="512px"
+                             viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve">
+                            <path fill="#15431F" d="M454.426,392.582c-5.439-16.32-15.298-32.782-29.839-42.362c-27.979-18.572-60.578-28.479-92.099-39.085
+                                c-7.604-2.664-15.33-5.568-22.279-9.7c-6.204-3.686-8.533-11.246-9.974-17.886c-0.636-3.512-1.026-7.116-1.228-10.661
+                                c22.857-31.267,38.019-82.295,38.019-124.136c0-65.298-36.896-83.495-82.402-83.495c-45.515,0-82.403,18.17-82.403,83.468
+                                c0,43.338,16.255,96.5,40.489,127.383c-0.221,2.438-0.511,4.876-0.95,7.303c-1.444,6.639-3.77,14.058-9.97,17.743
+                                c-6.957,4.133-14.682,6.756-22.287,9.42c-31.521,10.605-64.119,19.957-92.091,38.529c-14.549,9.58-24.403,27.159-29.838,43.479
+                                c-5.597,16.938-7.886,37.917-7.541,54.917h205.958h205.974C462.313,430.5,460.019,409.521,454.426,392.582z"></path>
+                        </svg>
+                        <p class="header__login-text">
+                            Ver usuarios
+                        </p>
+                    </a>
+                    <a class="header__login-btn" href="{{ url_for('users.add_users') }}">
+                        <svg class="header__login-svg" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                             width="512" height="512" viewBox="0 0 512 512">
+                            <path fill="#15431F" d="M192 368c0-75.617 47.937-140.243 115.016-165.1 8.14-18.269 12.984-38.582 12.984-58.9 0-79.529 0-144-96-144s-96 64.471-96 144c0 49.53 28.751 99.052 64 118.916v26.39c-108.551 8.874-192 62.21-192 126.694h198.653c-4.332-15.265-6.653-31.366-6.653-48z"></path>
+                            <path fill="#15431F" d="M368 224c-79.529 0-144 64.471-144 144s64.471 144 144 144c79.528 0 144-64.471 144-144s-64.471-144-144-144zM448 384h-64v64h-32v-64h-64v-32h64v-64h32v64h64v32z"></path>
+                        </svg>
+                        <p class="header__login-text">
+                            Agregar usuarios
+                        </p>
+                    </a>
+                {% endif %}
+                <a class="header__login-btn" href="{{ url_for('users.logout') }}" onclick="return confirm_submit('Logout');">
+                    <svg class="header__login-svg" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                         width="512" height="512" viewBox="0 0 512 512">
+                        <path fill="#15431F" d="M192 368c0-75.617 47.937-140.243 115.016-165.1 8.14-18.269 12.984-38.582 12.984-58.9 0-79.529 0-144-96-144s-96 64.471-96 144c0 49.53 28.751 99.052 64 118.916v26.39c-108.551 8.874-192 62.21-192 126.694h198.653c-4.332-15.265-6.653-31.366-6.653-48z"></path>
+                        <path fill="#15431F" d="M368 224c-79.529 0-144 64.471-144 144s64.471 144 144 144c79.528 0 144-64.471 144-144s-64.471-144-144-144zM448 384h-160v-32h160v32z"></path>
+                    </svg>
+                    <p class="header__login-text">
+                        Cerrar sesión
+                    </p>
+                </a>
+            {% else %}
+                <a class="header__login-btn" href="{{ url_for('users.login') }}">
+                    <svg class="header__login-svg" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+                         xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="512px" height="512px"
+                         viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve">
+                        <path fill="#15431F" d="M454.426,392.582c-5.439-16.32-15.298-32.782-29.839-42.362c-27.979-18.572-60.578-28.479-92.099-39.085
+                            c-7.604-2.664-15.33-5.568-22.279-9.7c-6.204-3.686-8.533-11.246-9.974-17.886c-0.636-3.512-1.026-7.116-1.228-10.661
+                            c22.857-31.267,38.019-82.295,38.019-124.136c0-65.298-36.896-83.495-82.402-83.495c-45.515,0-82.403,18.17-82.403,83.468
+                            c0,43.338,16.255,96.5,40.489,127.383c-0.221,2.438-0.511,4.876-0.95,7.303c-1.444,6.639-3.77,14.058-9.97,17.743
+                            c-6.957,4.133-14.682,6.756-22.287,9.42c-31.521,10.605-64.119,19.957-92.091,38.529c-14.549,9.58-24.403,27.159-29.838,43.479
+                            c-5.597,16.938-7.886,37.917-7.541,54.917h205.958h205.974C462.313,430.5,460.019,409.521,454.426,392.582z"></path>
+                    </svg>
+                    <p class="header__login-text">
+                        Iniciar sesión
+                    </p>
+                </a>
+            {% endif %}
+        </div>
+    </header>
+    <div id="blank-screen"></div>
+    <div class="loading-screen">
+        <div class="lds-spinner">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <p class="lds-message">
+            Espere, por favor...
+        </p>
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="flash-messages-container">
+                <div class="flash-messages">
+                    {% for message in messages %}
+                      <p>
+                          {{ message }}
+                      </p>
+                    {% endfor %}
+                    <div class="flash-close">
+                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+                            <path fill="#c00" d="M507.331 411.33c-0.002-0.002-0.004-0.004-0.006-0.005l-155.322-155.325 155.322-155.325c0.002-0.002 0.004-0.003 0.006-0.005 1.672-1.673 2.881-3.627 3.656-5.708 2.123-5.688 0.912-12.341-3.662-16.915l-73.373-73.373c-4.574-4.573-11.225-5.783-16.914-3.66-2.080 0.775-4.035 1.984-5.709 3.655 0 0.002-0.002 0.003-0.004 0.005l-155.324 155.326-155.324-155.325c-0.002-0.002-0.003-0.003-0.005-0.005-1.673-1.671-3.627-2.88-5.707-3.655-5.69-2.124-12.341-0.913-16.915 3.66l-73.374 73.374c-4.574 4.574-5.784 11.226-3.661 16.914 0.776 2.080 1.985 4.036 3.656 5.708 0.002 0.001 0.003 0.003 0.005 0.005l155.325 155.324-155.325 155.326c-0.001 0.002-0.003 0.003-0.004 0.005-1.671 1.673-2.88 3.627-3.657 5.707-2.124 5.688-0.913 12.341 3.661 16.915l73.374 73.373c4.575 4.574 11.226 5.784 16.915 3.661 2.080-0.776 4.035-1.985 5.708-3.656 0.001-0.002 0.003-0.003 0.005-0.005l155.324-155.325 155.324 155.325c0.002 0.001 0.004 0.003 0.006 0.004 1.674 1.672 3.627 2.881 5.707 3.657 5.689 2.123 12.342 0.913 16.914-3.661l73.373-73.374c4.574-4.574 5.785-11.227 3.662-16.915-0.776-2.080-1.985-4.034-3.657-5.707z"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="main-container">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='resources/js/script.min.js') }}"></script>
+    <script>
+        // register sw script in supporting browsers
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js', { scope: '/' }).then(() => {
+                console.log('Service Worker registered successfully.');
+            }).catch(error => {
+                console.log('Service Worker registration failed:', error);
+            });
+        }
+    </script>
+</body>
+</html>
