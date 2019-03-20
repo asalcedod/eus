@@ -410,7 +410,7 @@ function confirm_submit(submit) {
         }
     }
     else if (submit === 'Copy poll') {
-        if (confirm('¿Seguro que desea eliminar esta encuesta?')) {
+        if (confirm('¿Seguro que desea copiar esta encuesta?')) {
             $('.loading-screen').show();
             return true;
         }

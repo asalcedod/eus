@@ -90,9 +90,14 @@ def edit_poll(poll_id):
 def copy_poll(poll_id):
     poll = Poll.find_by_id(poll_id)
 
-    # poll.delete()
-    
-    poll.save_to_db()
+    title = poll.title+"-Copy"
+    questions = poll.questions
+    author = poll.author
+    timestamp = datetime.datetime.today()
+    published = False
+
+    poll_copy = Poll(title, questions, author, timestamp, published)
+    poll_copy.save_to_db()
 
     return redirect(url_for('index'))
 
@@ -121,6 +126,9 @@ def view_poll(poll_id):
 
             if q_type == 'open':
                 answers.append(q_answers)
+            elif q_type == 'pharagraf':
+                if len(q_answers) <= 250:
+                    answers.append(q_answers)
             else:
                 if q_type == 'multiple':
                     q_answers = [j for i in q_answers for j in i]

@@ -62,7 +62,10 @@
                                 <p class="question__content">{{ question['content'] }}</p>
                                 {% if question['type'] == 'open' %}
                                     <textarea id="answer_{{ question_number }}" class="form__input-box form__input-box--post-description form__input-box--question-content"
-                                              name="answer_{{ question_number }}"></textarea>
+                                            name="answer_{{ question_number }}"></textarea>
+                                {% elif question['type'] == 'pharagraf' %}
+                                    <textarea id="answer_{{ question_number }}" class="form__input-box form__input-box--post-description form__input-box--question-content"
+                                            name="answer_{{ question_number }}"></textarea>
                                 {% elif question['type'] == 'multiple' %}
                                     <fieldset id="answer_{{ question_number }}" class="poll__answer-container">
                                         {% for option in question['options'] %}

@@ -40,10 +40,20 @@
                                     {% if pollsToAnswer.update({'poll': True}) %} {% endif %}
                                     <div class="poll__container">
                                         <a class="poll__link" {% if poll['published'] %}
-                                           href="{{ url_for('polls.view_poll', poll_id=poll['_id']) }}"{% else %}
-                                            href="{{ url_for('polls.edit_poll', poll_id=poll['_id']) }}"{% endif %}>
+                                           href="{{ url_for('polls.view_poll', poll_id=poll['_id']) }}"{% endif %}>
                                             {{ poll['title'] }}
                                         </a>
+                                        {% if (current_user.role == 'teacher') %}
+                                            <a class="poll__editp"
+                                                    href="{{ url_for('polls.edit_poll', poll_id=poll['_id']) }}">
+                                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 129 129" enable-background="new 0 0 129 129" width="25px" height="25px" class=""><g><g>
+                                                    <g>
+                                                    <path d="m119.2,114.3h-109.4c-2.3,0-4.1,1.9-4.1,4.1s1.9,4.1 4.1,4.1h109.5c2.3,0 4.1-1.9 4.1-4.1s-1.9-4.1-4.2-4.1z" data-original="#000000" class="active-path" data-old_color="#15431f" fill="#15431f"/>
+                                                    <path d="m5.7,78l-.1,19.5c0,1.1 0.4,2.2 1.2,3 0.8,0.8 1.8,1.2 2.9,1.2l19.4-.1c1.1,0 2.1-0.4 2.9-1.2l67-67c1.6-1.6 1.6-4.2 0-5.9l-19.2-19.4c-1.6-1.6-4.2-1.6-5.9-1.77636e-15l-13.4,13.5-53.6,53.5c-0.7,0.8-1.2,1.8-1.2,2.9zm71.2-61.1l13.5,13.5-7.6,7.6-13.5-13.5 7.6-7.6zm-62.9,62.9l49.4-49.4 13.5,13.5-49.4,49.3-13.6,.1 .1-13.5z" data-original="#000000" class="active-path" data-old_color="#15431f" fill="#15431f"/>
+                                                    </g>
+                                                </g></g> </svg>
+                                            </a>
+                                        {% endif %}
                                         <p class="poll__timestamp">
                                             <abbr title="{{ poll['timestamp'].strftime('%d/%b/%Y - %I:%M %p') }}">
                                                 {{ poll['timestamp']|timesince }}
@@ -56,13 +66,10 @@
                                                     <path fill="#c00" d="M507.331 411.33c-0.002-0.002-0.004-0.004-0.006-0.005l-155.322-155.325 155.322-155.325c0.002-0.002 0.004-0.003 0.006-0.005 1.672-1.673 2.881-3.627 3.656-5.708 2.123-5.688 0.912-12.341-3.662-16.915l-73.373-73.373c-4.574-4.573-11.225-5.783-16.914-3.66-2.080 0.775-4.035 1.984-5.709 3.655 0 0.002-0.002 0.003-0.004 0.005l-155.324 155.326-155.324-155.325c-0.002-0.002-0.003-0.003-0.005-0.005-1.673-1.671-3.627-2.88-5.707-3.655-5.69-2.124-12.341-0.913-16.915 3.66l-73.374 73.374c-4.574 4.574-5.784 11.226-3.661 16.914 0.776 2.080 1.985 4.036 3.656 5.708 0.002 0.001 0.003 0.003 0.005 0.005l155.325 155.324-155.325 155.326c-0.001 0.002-0.003 0.003-0.004 0.005-1.671 1.673-2.88 3.627-3.657 5.707-2.124 5.688-0.913 12.341 3.661 16.915l73.374 73.373c4.575 4.574 11.226 5.784 16.915 3.661 2.080-0.776 4.035-1.985 5.708-3.656 0.001-0.002 0.003-0.003 0.005-0.005l155.324-155.325 155.324 155.325c0.002 0.001 0.004 0.003 0.006 0.004 1.674 1.672 3.627 2.881 5.707 3.657 5.689 2.123 12.342 0.913 16.914-3.661l73.373-73.374c4.574-4.574 5.785-11.227 3.662-16.915-0.776-2.080-1.985-4.034-3.657-5.707z"></path>
                                                 </svg>
                                             </a>
-                                            <a class="poll__copy" onclick="return confirm_submit('Copy poll')"
-                                               href="{{ url_for('polls.copy_poll', poll_id=poll['_id']) }}">
-                                               <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 470.333 470.333" style="enable-background:new 0 0 470.333 470.333;" xml:space="preserve" width="15px" height="15px"><g><g>
-                                                <g>
+                                            <a class="poll__copy" onclick="return confirm_submit('Copy poll')" href="{{ url_for('polls.copy_poll', poll_id=poll['_id']) }}">
+                                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 470.333 470.333" style="enable-background:new 0 0 470.333 470.333;" xml:space="preserve" width="15px" height="15px">
                                                     <path d="M333.483,0h-194.65c-9.35,0-17,7.65-17,17v73.667H48.167c-9.35,0-17,7.65-17,17v345.667c0,9.35,7.65,17,17,17h286.167    c9.35,0,17-7.65,17-17v-76.5h70.833c9.35,0,17-7.65,17-17V106.25c0-4.533-1.7-8.783-4.817-11.9L345.667,5.1    C342.55,1.7,338.017,0,333.483,0z M317.333,436.333H65.167V124.667h56.667v235.167c0,9.35,7.65,17,17,17h178.5V436.333z     M155.833,342.833V34h147.333v96.333c0,9.35,7.65,17,17,17h85v195.5H155.833z M405.167,113.333h-68V44.767L405.167,113.333    L405.167,113.333z" data-original="#000000" class="active-path" data-old_color="#15431f" fill="#15431f"/>
-                                                </g>
-                                            </g></g> </svg>
+                                                </svg>
                                             </a>
                                             {% if poll['published'] %}
                                                 <p class="poll__published poll__published--active">

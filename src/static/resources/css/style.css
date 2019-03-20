@@ -372,11 +372,11 @@ h1, h2, h3, h4, h5, h6, p, a, label {
     z-index: 9999;
 }
 
-.header_logo {
+.header__logo {
     flex: 0 0 auto;
     font-size: 2em;
     font-weight: 700;
-    color: #15431F;
+    color: rgb(22, 82, 35);
 }
 
 .header__login {
@@ -518,7 +518,7 @@ h1, h2, h3, h4, h5, h6, p, a, label {
     margin-top: 2%;
 }
 
-.poll__edit,
+p,
 .poll__answers {
     width: 2em;
     height: 2em;
@@ -547,7 +547,18 @@ h1, h2, h3, h4, h5, h6, p, a, label {
     width: 1em;
     height: 1em;
     top: 1em;
-    right: 1em;
+    right: 3em;
+    color: rgb(21, 112, 37);
+    font-size: 0.75em;
+    text-align: center;
+}
+
+.poll__editp{
+    position: absolute;
+    width: 1em;
+    height: 1em;
+    top: 1em;
+    right: 5em;
     color: rgb(21, 112, 37);
     font-size: 0.75em;
     text-align: center;
