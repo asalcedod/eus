@@ -956,12 +956,28 @@ p,
     display: flex;
 }
 
-.form__post-submit {
+.form__post-save {
     width: 30%;
     margin: 0 auto;
     padding: 1% 2%;
     color: #fff;
     background-color: #6fb555;
+    font-size: 1em;
+    font-family: -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    -webkit-border-radius: 2em;
+    -moz-border-radius: 2em;
+    border-radius: 2em;
+    border: none;
+    text-align: center;
+    cursor: pointer;
+}
+
+.form__post-submit {
+    width: 30%;
+    margin: 0 auto;
+    padding: 1% 2%;
+    color: #fff;
+    background-color: #60b2ff;
     font-size: 1em;
     font-family: -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
     -webkit-border-radius: 2em;
