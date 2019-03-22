@@ -1,0 +1,14 @@
+.form__answer_cuad-delete {
+    position: absolute;
+    width: 0.75em;
+    height: 0.75em;
+    top: 50%;
+    right: 0;
+    color: #c00;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+    cursor: pointer;
+}

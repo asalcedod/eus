@@ -73,6 +73,27 @@
                                                    name="answer_{{ question_number }}"> {{ option }}<br>
                                         {% endfor %}
                                     </fieldset>
+                                {% elif question['type'] == 'cuad' %}
+                                    <table style="width:100%">
+                                        <tr>
+                                            <th style="text-align: left; padding: 8px;"> </th>
+                                            {% for column in question['column'] %}
+                                                <th style="text-align: left; padding: 8px;">{{ column }}</th>
+                                            {% endfor %}
+                                        </tr>
+                                        {% for row in question['row'] %}
+                                        {% set i_row = loop.index %}
+                                            <fieldset id="answer_{{ row }}" class="poll__answer-container">
+                                                <tr>
+                                                    <td>{{ row }}</td>
+                                                    {% for column in question['column'] %}
+                                                        <td><input class="poll__answer" type="radio" value="{{ column }}"
+                                                            name="row_answer_{{ i_row }}"></td>
+                                                    {% endfor %}
+                                                </tr>
+                                            </fieldset>
+                                        {% endfor %}
+                                    </table>
                                 {% else %}
                                     <fieldset id="answer_{{ question_number }}" class="poll__answer-container">
                                         {% for option in question['options'] %}

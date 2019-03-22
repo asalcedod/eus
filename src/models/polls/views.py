@@ -34,6 +34,10 @@ def add_poll():
 
             if question['type'] != 'open':
                 question['options'] = [answer for answer in request.form.getlist('answer_question_'+str(j+1))]
+            if question['type'] == 'cuad':
+                question['row'] = [answer for answer in request.form.getlist('row_question_'+str(j+1))]
+                question['column'] = [answer for answer in request.form.getlist('colm_question_'+str(j+1))]
+                question['n'] = len(request.form.getlist('row_question_'+str(j+1))) + len(request.form.getlist('colm_question_'+str(j+1)))
 
             questions.append(question)
 
@@ -70,6 +74,10 @@ def edit_poll(poll_id):
 
             if question['type'] != 'open':
                 question['options'] = [answer for answer in request.form.getlist('answer_question_' + str(j + 1))]
+            if question['type'] == 'cuad':
+                question['row'] = [answer for answer in request.form.getlist('row_question_' + str(j + 1))]
+                question['column'] = [answer for answer in request.form.getlist('colm_question_' + str(j + 1))]
+                question['n'] = len(request.form.getlist('row_question_'+str(j+1))) + len(request.form.getlist('colm_question_'+str(j+1)))
 
             questions.append(question)
 
@@ -129,6 +137,26 @@ def view_poll(poll_id):
             elif q_type == 'pharagraf':
                 if len(q_answers) <= 250:
                     answers.append(q_answers)
+            elif q_type == 'cuad':
+                q_answers.sort()
+                q_answers = [(key, len(list(group))) for key, group in groupby(q_answers[0])]
+                
+                column = question['column']
+
+                for j in range(len(column)):
+                    try:
+                        if column[j] not in q_answers[0]:
+                            q_answers.insert(j, (column[j], 0))
+                    except IndexError:
+                        q_answers.append((column[j], 0))
+
+                print(q_answers)
+                data = [[answer[0] for answer in q_answers],
+                        [answer[1] for answer in q_answers]
+                        ]
+                print(data)
+                answers.append(data)
+
             else:
                 if q_type == 'multiple':
                     q_answers = [j for i in q_answers for j in i]
@@ -156,8 +184,12 @@ def view_poll(poll_id):
         for q in range(len(poll.questions)):
             answer = request.form.getlist('answer_'+str(q + 1))
 
-            if poll.questions[q]['type'] != 'multiple':
+            if poll.questions[q]['type'] != 'multiple' and poll.questions[q]['type'] != 'cuad':
                 answer = answer[0]
+            elif poll.questions[q]['type'] == 'cuad':
+                for r in range(len(poll.questions[q]['row'])):
+                    row = request.form.getlist('row_answer_'+str(r + 1))
+                    answer.append(row[0])
 
             poll.questions[q]['answers'].append(answer)
 
