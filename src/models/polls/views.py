@@ -138,24 +138,23 @@ def view_poll(poll_id):
                 if len(q_answers) <= 250:
                     answers.append(q_answers)
             elif q_type == 'cuad':
-                q_answers.sort()
-                q_answers = [(key, len(list(group))) for key, group in groupby(q_answers[0])]
-                
-                column = question['column']
+                for n_answer in q_answers:
+                    q_answers.sort()
+                    q_answers = [(key, len(list(group))) for key, group in groupby(n_answer)]
+                    
+                    column = question['column']
 
-                for j in range(len(column)):
-                    try:
-                        if column[j] not in q_answers[0]:
-                            q_answers.insert(j, (column[j], 0))
-                    except IndexError:
-                        q_answers.append((column[j], 0))
+                    for j in range(len(column)):
+                        try:
+                            if column[j] not in q_answers[0]:
+                                q_answers.insert(j, (column[j], 0))
+                        except IndexError:
+                            q_answers.append((column[j], 0))
 
-                print(q_answers)
-                data = [[answer[0] for answer in q_answers],
-                        [answer[1] for answer in q_answers]
-                        ]
-                print(data)
-                answers.append(data)
+                    data = [[answer[0] for answer in q_answers],
+                            [answer[1] for answer in q_answers]
+                            ]
+                    answers.append(data)
 
             else:
                 if q_type == 'multiple':

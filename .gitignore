@@ -3,7 +3,7 @@ venv
 venv/
 
 # Database setup
-src/common/database.py
+# src/common/database.py
 
 # Distribution / packaging
 .Python
