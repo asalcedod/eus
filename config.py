@@ -29,5 +29,5 @@ MONGODB_SETTINGS = {
 MAIL_SERVER = "smtp.gmail.com"
 MAIL_PORT = 465
 MAIL_USE_SSL = True
-MAIL_USERNAME = 'eusadministrador@unisucre.edu.co'
-MAIL_PASSWORD = 'Eus12345.'
+MAIL_USERNAME = 'ing.asalcedod@gmail.com'
+MAIL_PASSWORD = 'gjbhfzsjmjeqtjfn'

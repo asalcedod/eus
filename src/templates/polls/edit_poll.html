@@ -116,8 +116,8 @@
                                 {% elif question['type'] == 'cuad' %}
                                     <fieldset class="form__answer-group" data-type="radio">
                                         {% for i in range(question['n']) %}
-                                            <div class="form__answer-container">
-                                                {% if question['column'][loop.index-1] %}
+                                            {% if question['column'][loop.index-1] %}
+                                                <div class="form__answer-container"><div class="form__answer-container"></div>
                                                     <div>
                                                         <input id="colm" class="form__answer-label" type="text"
                                                             name="colm_question_{{ questionNo }}"
@@ -130,8 +130,10 @@
                                                             </div>
                                                         {% endif %}
                                                     </div>
-                                                {% endif %}
-                                                {% if question['row'][loop.index-1] %}
+                                                </div>
+                                            {% endif %}
+                                            {% if question['row'][loop.index-1] %}
+                                                <div class="form__answer-container"><div class="form__answer-container"></div>
                                                     <div>
                                                         <input id="row" class="form__answer-label" type="text"
                                                                 name="row_question_{{ questionNo }}"
@@ -144,15 +146,22 @@
                                                             </div>
                                                         {% endif %}
                                                     </div>
-                                                {% endif %}
-                                            </div>
+                                                </div>
+                                            {% endif %}
                                         {% endfor %}
                                     </fieldset>
                                     <div class="form__answer-add-container">
-                                        <div class="form__answer_cuad-add-btn">
+                                        <div class="form__answer_row-add-btn">
                                             <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="640" height="640" viewBox="0 0 640 640">
-                                                <path fill="#15431F" d="M352 288v-128h-64v128h-128v64h128v128h64v-128h128v-64h-128zM320 640c-176.731 0-320-143.269-320-320s143.269-320 320-320v0c176.731 0 320 143.269 320 320s-143.269 320-320 320v0z"></path>
+                                                <path fill="#15431F" d="M352 288v-128h-64v128h-128v64h128v128h64v-128h128v-64h-128zM320 640c-176.731 0-320-143.269-320-320s143.269-320 320-320v0c176.731 0 320 143.269 320 320s-143.269 320-320 320v0z">Fila</path>
                                             </svg>
+                                            F
+                                        </div>
+                                        <div class="form__answer_column-add-btn">
+                                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="640" height="640" viewBox="0 0 640 640">
+                                                <path fill="#15431F" d="M352 288v-128h-64v128h-128v64h128v128h64v-128h128v-64h-128zM320 640c-176.731 0-320-143.269-320-320s143.269-320 320-320v0c176.731 0 320 143.269 320 320s-143.269 320-320 320v0z">Columna</path>
+                                            </svg>
+                                            C
                                         </div>
                                     </div>
                                 {% elif question['type'] == 'multiple' %}

@@ -52,7 +52,7 @@ class Utils(object):
         msg.body = "¡Hola, {}! Un profesor te ha invitado al sistema de encuestas y noticias de la Universad de " \
                    "Sucre.\n\n" \
                    "Para aceptar su invitación, haz click en el siguiente link y crea una contraseña:\n\n" \
-                   "https://{}/confirmar-usuario/{}".format(name, 'eus-heroku.herokuapp.com', user_id)
+                   "https//{}:5051/confirmar-usuario/{}".format(name, '52.14.142.228', user_id)
 
         mail.send(msg)
 
@@ -65,7 +65,7 @@ class Utils(object):
 
         msg.body = "¡Hola, {}!\n\n" \
                    "Para recuperar tu contraseña, haz click en el siguiente link y crea una nueva:\n\n" \
-                   "https://{}/confirmar-usuario/{}".format(name, 'eus-heroku.herokuapp.com', user_id)
+                   "http://{}:5051/confirmar-usuario/{}".format(name, '52.14.142.228', user_id)
 
         mail.send(msg)
 

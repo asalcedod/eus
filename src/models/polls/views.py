@@ -154,7 +154,7 @@ def view_poll(poll_id):
                     data = [[answer[0] for answer in q_answers],
                             [answer[1] for answer in q_answers]
                             ]
-                    answers.append(data)
+                answers.append(data)
 
             else:
                 if q_type == 'multiple':
