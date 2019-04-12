@@ -137,25 +137,22 @@ def view_poll(poll_id):
             elif q_type == 'pharagraf':
                 if len(q_answers) <= 250:
                     answers.append(q_answers)
-            elif q_type == 'cuad':
-                for n_answer in q_answers:
-                    q_answers.sort()
-                    q_answers = [(key, len(list(group))) for key, group in groupby(n_answer)]
+            # elif q_type == 'cuad':
+            #         q_answers.sort()
+            #         q_answers = [(key, len(list(group))) for key, group in groupby(q_answers)]
                     
-                    column = question['column']
+            #         column = question['column']
+            #         for j in range(len(column)):
+            #             try:
+            #                 if column[j] not in q_answers[0]:
+            #                     q_answers.insert(j, (column[j], 0))
+            #             except IndexError:
+            #                 q_answers.append((column[j], 0))
 
-                    for j in range(len(column)):
-                        try:
-                            if column[j] not in q_answers[0]:
-                                q_answers.insert(j, (column[j], 0))
-                        except IndexError:
-                            q_answers.append((column[j], 0))
-
-                    data = [[answer[0] for answer in q_answers],
-                            [answer[1] for answer in q_answers]
-                            ]
-                answers.append(data)
-
+            #         data = [[answer[0] for answer in q_answers],
+            #                 [answer[1] for answer in q_answers]
+            #                 ]
+            #         answers.append(data)
             else:
                 if q_type == 'multiple':
                     q_answers = [j for i in q_answers for j in i]
@@ -163,7 +160,7 @@ def view_poll(poll_id):
                 q_answers.sort()
                 q_answers = [(key, len(list(group))) for key, group in groupby(q_answers)]
                 options = question['options']
-
+                
                 for j in range(len(options)):
                     try:
                         if options[j] not in q_answers[j]:
@@ -174,7 +171,6 @@ def view_poll(poll_id):
                 data = [[answer[0] for answer in q_answers],
                         [answer[1] for answer in q_answers]
                         ]
-
                 answers.append(data)
 
         return render_template('polls/poll_answers.html', poll=poll, answers=answers)
@@ -182,7 +178,6 @@ def view_poll(poll_id):
     if request.method == 'POST':
         for q in range(len(poll.questions)):
             answer = request.form.getlist('answer_'+str(q + 1))
-
             if poll.questions[q]['type'] != 'multiple' and poll.questions[q]['type'] != 'cuad':
                 answer = answer[0]
             elif poll.questions[q]['type'] == 'cuad':

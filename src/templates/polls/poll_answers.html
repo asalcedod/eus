@@ -33,7 +33,7 @@
                     </svg>
                 </a>
             </div>
-            <div class="poll__answers-container">
+            <div class="poll__answers-container"> 
                 <p class="poll__title">{{ poll['title'] }}</p>
                 <div class="poll__questions-container">
                     {% for question in poll['questions'] %}
@@ -58,6 +58,18 @@
                                         </p>
                                     {% endif %}
                                 </div>
+                            {% elif question['type'] == 'cuad' %}
+                                {% if answers[loop.index0][1]|sum %}
+                                    <div id="graph-{{ loop.index0 }}" class="question__graph-container"
+                                        data-graph="{{ loop.index0 }}">
+                                    </div>
+                                {% else %}
+                                    <div class="question__answers-container">
+                                        <p class="question__answer">
+                                            No hay ninguna respuesta por el momento.
+                                        </p>
+                                    </div>
+                                {% endif %}
                             {% else %}
                                 {% if answers[loop.index0][1]|sum %}
                                     <div id="graph-{{ loop.index0 }}" class="question__graph-container"
@@ -90,25 +102,24 @@
 
         $('.question__graph-container').each(function () {
             var $this = $(this);
-
+            var trace  = []
             gd3 = d3.select('div[id="' + $this.attr('id') + '"]');
             gd = gd3.node();
-
-            trace = {
-                type: 'bar',
+            trace.push({
                 x: full_data[$this.data('graph')][0],
-                y: full_data[$this.data('graph')][1]
-            };
+                y: full_data[$this.data('graph')][1],
+                type: 'bar',
+            })
 
-            data = [trace];
+            data = trace;
             layout = {
                 autosize: true,
                 xaxis: {
-                    tickangle: 45,
+                    tickangle: 10,
                     type: 'category'
                 },
                 yaxis: {
-                    tickformat: ',d'
+                    tickformat: ''
                 },
                 plot_bgcolor: 'dedede',
                 paper_bgcolor: 'dedede'

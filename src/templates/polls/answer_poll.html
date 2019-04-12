@@ -52,12 +52,12 @@
                 <form class="form form--poll" style="height: 100%;"
                       action="{{ url_for('polls.view_poll', poll_id=poll['_id']) }}" method="post">
                     <p class="poll__title">{{ poll['title'] }}</p>
-                    <div class="poll__questions-container" style="position: relative; height: 75%; margin-bottom: 2%">
+                    <div class="poll__questions-container" style="position: relative; height: 100%; margin-bottom: 2%">
                         {% for question in poll['questions'] %}
                             {% set question_number = loop.index %}
 
                             <div class="poll__answer-question-container{% if loop.first %} poll__answer-question-container--active{% endif %}"
-                                 data-question="{{ question_number }}" data-type="{{ question['type'] }}">
+                                 data-question="{{ question_number }}" data-type="{{ question['type'] }}" style="position: relative; height: 100%; margin-bottom: 2%">
                                 <label for="question">Pregunta {{ question_number }}</label>
                                 <p class="question__content">{{ question['content'] }}</p>
                                 {% if question['type'] == 'open' %}
@@ -73,6 +73,13 @@
                                                    name="answer_{{ question_number }}"> {{ option }}<br>
                                         {% endfor %}
                                     </fieldset>
+                                {% elif question['type'] == 'list' %}
+                                    <select id="answer_{{ question_number }}">
+                                        <option value="0" name="answer_{{ question_number }}">Opciones</option> 
+                                    {% for option in question['options'] %}
+                                        <option value="{{ loop.index }}" name="answer_{{ question_number }}">{{ option }}</option> 
+                                    {% endfor %}
+                                    </select>
                                 {% elif question['type'] == 'cuad' %}
                                     <table style="width:100%">
                                         <tr>
@@ -83,11 +90,11 @@
                                         </tr>
                                         {% for row in question['row'] %}
                                         {% set i_row = loop.index %}
-                                            <fieldset id="answer_{{ row }}" class="poll__answer-container">
-                                                <tr>
-                                                    <td>{{ row }}</td>
+                                            <fieldset id="answer_{{ question_number }}" class="poll__answer-container">
+                                                <tr class="tr">
+                                                    <td class="td">{{ row }}</td>
                                                     {% for column in question['column'] %}
-                                                        <td><input class="poll__answer" type="radio" value="{{ column }}"
+                                                        <td class="td"><input class="poll__answer" type="radio" value="{{ column }}"
                                                             name="row_answer_{{ i_row }}"></td>
                                                     {% endfor %}
                                                 </tr>
@@ -140,7 +147,7 @@
                     questionNo = question.data('question'),
                     questionType = question.data('type'),
                     answer = question.find('#answer_'+questionNo);
-
+                    
                 if ((questionType === 'open' && !answer.val()) ||
                     (questionType === 'multiple' && answer.find(':checkbox:checked').length === 0) ||
                     ((questionType === 'boolean' || questionType === 'options') && answer.find(':radio:checked').length === 0)) {
@@ -166,7 +173,7 @@
                 valid = false;
 
             if (!$(this).hasClass('poll__btn--disabled')) {
-                if ((type === 'open' && answer.val()) || answer.find(':checked').val()) {
+                if ((type === 'open' && answer.val()) || answer.find(':checked').val() || type === 'cuad') {
                     valid = true;
                 }
 
